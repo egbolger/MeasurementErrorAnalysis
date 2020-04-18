@@ -4,8 +4,6 @@ library(MASS)
 library(tidyverse)
 
 
-
-
 MEM_functionMult <- function() {
   args <- commandArgs(trailingOnly = TRUE)
   x2 <-args[1]
@@ -36,7 +34,6 @@ MEM_functionMult <- function() {
   y2_repdf <- dat2_rep %>% dplyr:: select(id2,starts_with("y"))
   x2_rep<-as.matrix(x2_repdf[,c(colnames(x2))])
   y2_rep<-as.matrix(unlist(y2_repdf[,2]))
-  #y2_rep<- as.matrix(y2_rep[,1])
   numpart_rep <- length(unique(dat2_rep$id2))
   
   #Calculation for the average across the total number of days for each individual
@@ -140,9 +137,7 @@ MEM_functionMult <- function() {
   beta_0mult<- y_dotdotmatrix - (x_dotdotmatrix %*% beta_matrix)
   
   s_vvmult<-(1/(numpart-numpred))*((t(y_bardotmatrix - rep(beta_0mult,numpart) - (x_bardotmatrix%*%beta_matrix)))%*% (y_bardotmatrix - rep(beta_0mult,numpart) - (x_bardotmatrix%*%beta_matrix)))
-  
   s_rrmult <- Sig_ww - (2*(t(beta_matrix)%*%(Sig_wu))) + (t(beta_matrix)%*%(Sig_uu)%*%(beta_matrix))
-  
   s_vvmult<-as.numeric(s_vvmult)
   s_rrmult<-as.numeric(s_rrmult)
   #Variance for error in the equation
@@ -175,7 +170,7 @@ MEM_functionMult <- function() {
     tstat_matrix[i,1] <- round(beta_matrix[i,1]/ sqrt(diag_variance[i]),2)
   }
   
-  #Finding the 95% Confidence Intervals
+  #Finding the Confidence Intervals
   CIlevel<-as.numeric(CIlevel)
   CI_matrix <- array(dim = c(2, 1, nrow = nrow(beta_matrix)))
   for (i in 1:nrow(beta_matrix)){
